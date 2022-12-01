@@ -5,18 +5,12 @@ namespace AoC;
 public static class Timer
 {
     private static readonly Stopwatch Watch = new();
-    private static readonly Stopwatch Total = new();
+    private static double _total;
 
     public static void Start()
     {
+        _total = 0;
         Watch.Start();
-        Total.Start();
-    }
-
-    private static void Stop()
-    {
-        Watch.Stop();
-        Total.Stop();
     }
 
     public static void StartLap()
@@ -27,12 +21,17 @@ public static class Timer
     public static void LogLap()
     {
         Watch.Stop();
-        Console.WriteLine($"( {Watch.Elapsed.TotalMilliseconds} ms)");
+
+        var lapTime = Watch.Elapsed.TotalMilliseconds;
+        _total += lapTime;
+
+        Console.WriteLine($"( {lapTime:0.000} ms)");
     }
 
     public static void LogTotal()
     {
-        Stop();
-        Console.WriteLine($"Total Execution Time: {Total.Elapsed.TotalMilliseconds} ms");
+        Watch.Stop();
+
+        Console.WriteLine($"Total Execution Time: {_total:0.000} ms");
     }
 }

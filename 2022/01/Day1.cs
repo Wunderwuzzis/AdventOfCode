@@ -4,28 +4,25 @@ public class Day1 : Day<int>
 {
     public Day1(int day, string title, int? target1 = null, int? target2 = null) : base(day, title, target1, target2) { }
 
-    protected override int Part1()
+    private IEnumerable<int> GetCalories()
     {
-        return GetCarriedCalories().MaxBy(x => x);
+        return Data.Select((_, i) => Data.Skip(i)
+            .TakeWhile(line =>
+            {
+                i++;
+                return line != string.Empty;
+            })
+            .Select(int.Parse)
+            .Sum());
     }
 
-    private IEnumerable<int> GetCarriedCalories()
+    protected override int Part1()
     {
-        var result = new List<int>();
-        var skip = 0;
-        while (skip < Data.Length)
-        {
-            var items = Data.Skip(skip).TakeWhile(line => line != string.Empty).Select(int.Parse).ToArray();
-            skip += items.Length + 1; // + empty line
-
-            result.Add(items.Sum());
-        }
-
-        return result;
+        return GetCalories().Max();
     }
 
     protected override int Part2()
     {
-        return GetCarriedCalories().OrderByDescending(x => x).Take(3).Sum();
+        return GetCalories().OrderByDescending(x => x).Take(3).Sum();
     }
 }
