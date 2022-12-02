@@ -4,19 +4,31 @@ namespace AoC;
 
 public class Day2 : Day<int>
 {
-    public Day2(string title, int? target1 = null, int? target2 = null) : base(2, title, target1, target2) { }
-
-    private Dictionary<char, Result> _results = new() { ['X'] = Result.Defeat, ['Y'] = Result.Draw, ['Z'] = Result.Victory };
-    private Dictionary<char, char> _draws = new() { ['X'] = 'A', ['Y'] = 'B', ['Z'] = 'C' };
-    private Dictionary<char, char> _rules = new() { ['X'] = 'C', ['Y'] = 'A', ['Z'] = 'B' };
-    private Dictionary<char, char> _defeat = new() { ['X'] = 'B', ['Y'] = 'C', ['Z'] = 'A' };
-    private Dictionary<char, int> _scores = new() { ['X'] = 1, ['Y'] = 2, ['Z'] = 3 };
-
     private enum Result
     {
-        Defeat = 0,
-        Draw = 3,
-        Victory = 6
+        Defeat,
+        Draw,
+        Victory
+    }
+
+    private IEnumerable<char[]> _matchData;
+
+    private Dictionary<char, char> _rpsChars = new() { ['A'] = 'X', ['B'] = 'Y', ['C'] = 'Z' };
+    private Dictionary<char, char> _rules = new() { ['X'] = 'Z', ['Y'] = 'X', ['Z'] = 'Y' };
+    private Dictionary<char, Result> _results = new() { ['X'] = Result.Defeat, ['Y'] = Result.Draw, ['Z'] = Result.Victory };
+
+    private Dictionary<char, int> _shapeScores = new() { ['X'] = 1, ['Y'] = 2, ['Z'] = 3 };
+    private Dictionary<Result, int> _resultScores = new() { [Result.Defeat] = 0, [Result.Draw] = 3, [Result.Victory] = 6 };
+
+    public Day2(string title, int? target1 = null, int? target2 = null) : base(2, title, target1, target2)
+    {
+        _matchData = Data.Select(line => line.Split(' ').Select(GetRpsChar).ToArray());
+    }
+
+    private char GetRpsChar(string input)
+    {
+        var c = char.Parse(input);
+        return _rpsChars.TryGetValue(c, out var rps) ? rps : c;
     }
 
     protected override int Part1()
@@ -26,10 +38,9 @@ public class Day2 : Day<int>
 
     private IEnumerable<int> CalculateGameScore1()
     {
-        foreach (var line in Data)
+        foreach (var (enemy, own) in _matchData)
         {
-            var (enemy, own) = line.Split(' ').Select(char.Parse).ToArray();
-            if (_draws[own] == enemy)
+            if (own == enemy)
                 yield return CalculateScore(own, Result.Draw);
             else if (_rules[own] == enemy)
                 yield return CalculateScore(own, Result.Victory);
@@ -38,9 +49,9 @@ public class Day2 : Day<int>
         }
     }
 
-    private int CalculateScore(char own, Result draw)
+    private int CalculateScore(char own, Result result)
     {
-        return _scores[own] + (int) draw;
+        return _shapeScores[own] + _resultScores[result];
     }
 
     protected override int Part2()
@@ -50,9 +61,8 @@ public class Day2 : Day<int>
 
     private IEnumerable<int> CalculateGameScore2()
     {
-        foreach (var line in Data)
+        foreach (var (enemy, resultKey) in _matchData)
         {
-            var (enemy, resultKey) = line.Split(' ').Select(char.Parse).ToArray();
             var result = _results[resultKey];
             var own = GetRequired(enemy, result);
             yield return CalculateScore(own, result);
@@ -63,8 +73,8 @@ public class Day2 : Day<int>
     {
         return result switch
         {
-            Result.Defeat => _defeat.First(x => x.Value == enemy).Key,
-            Result.Draw => _draws.First(x => x.Value == enemy).Key,
+            Result.Defeat => _rules[enemy],
+            Result.Draw => enemy,
             Result.Victory => _rules.First(x => x.Value == enemy).Key,
             _ => throw new ArgumentOutOfRangeException(nameof(result), result, null)
         };
