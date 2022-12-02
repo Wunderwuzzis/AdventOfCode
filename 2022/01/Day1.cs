@@ -2,7 +2,7 @@
 
 public class Day1 : Day<int>
 {
-    public Day1(int day, string title, int? target1 = null, int? target2 = null) : base(day, title, target1, target2) { }
+    public Day1(string title, int? target1 = null, int? target2 = null) : base(1, title, target1, target2) { }
 
     private IEnumerable<int> GetCalories()
     {
