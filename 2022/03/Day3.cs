@@ -1,4 +1,6 @@
-﻿namespace AoC;
+﻿using System.Diagnostics;
+
+namespace AoC;
 
 public class Day3 : Day<int>
 {
@@ -9,8 +11,8 @@ public class Day3 : Day<int>
         return Data.Sum(line =>
         {
             var (compartment1, compartment2) = GetCompartments(line);
-            var duplicate = FindDuplicateItemType(compartment1, compartment2);
-            return GetPriority(duplicate);
+            var duplicateItemType = FindDuplicateItemType(compartment1, compartment2);
+            return GetPriority(duplicateItemType);
         });
     }
 
@@ -22,7 +24,7 @@ public class Day3 : Day<int>
 
     private static char FindDuplicateItemType(IEnumerable<char> compartment1, IEnumerable<char> compartment2)
     {
-        return compartment1.FirstOrDefault(compartment2.Contains);
+        return compartment1.First(compartment2.Contains);
     }
 
     private static int GetPriority(char character)
@@ -31,11 +33,25 @@ public class Day3 : Day<int>
             return character - 'a' + 1;
         if (char.IsUpper(character))
             return character - 'A' + 1 + 26;
-        throw new ArgumentException("Can't get type priority for non-letter character");
+        throw new InvalidOperationException("Can't get type priority for non-letter character");
     }
 
     protected override int Part2()
     {
-        return 0;
+        var sum = 0;
+        for (var i = 0; i < Data.Length; i += 3)
+        {
+            var group = Data.Skip(i).Take(3).ToArray();
+            var commonItemType = FindCommonItemType(group);
+            sum += GetPriority(commonItemType);
+        }
+
+        return sum;
+    }
+
+    private static char FindCommonItemType(IReadOnlyList<string> group)
+    {
+        Debug.Assert(group.Count == 3);
+        return group[0].First(character => group[1].Contains(character) && group[2].Contains(character));
     }
 }
