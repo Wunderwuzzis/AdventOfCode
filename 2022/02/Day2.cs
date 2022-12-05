@@ -2,7 +2,7 @@
 
 namespace AoC;
 
-public class Day2 : Day<int>
+public class Day2 : Day<int, int?>
 {
     private enum Result
     {

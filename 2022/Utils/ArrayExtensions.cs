@@ -38,7 +38,7 @@ public static class ArrayExtensions
     public static void Deconstruct<T>(this T[] array, out T a0, out T a1, out T a2)
     {
         if (array == null || array.Length < 3)
-            throw new ArgumentException($"Cannot deconstruct array. Length for tuple needs to be {3}!", nameof(array));
+            throw new ArgumentException($"Cannot deconstruct array. Length needs to be {3}!", nameof(array));
 
         a0 = array[0];
         a1 = array[1];
@@ -47,8 +47,8 @@ public static class ArrayExtensions
 
     public static void Deconstruct<T>(this T[] array, out T a0, out T a1, out T a2, out T a3)
     {
-        if (array == null || array.Length < 3)
-            throw new ArgumentException($"Cannot deconstruct array. Length for tuple needs to be {3}!", nameof(array));
+        if (array == null || array.Length < 4)
+            throw new ArgumentException($"Cannot deconstruct array. Length needs to be {4}!", nameof(array));
 
         a0 = array[0];
         a1 = array[1];

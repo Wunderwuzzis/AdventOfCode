@@ -1,6 +1,6 @@
 ﻿namespace AoC;
 
-public class Day3Short : Day<int>
+public class Day3Short : Day<int, int?>
 {
     public Day3Short(string title, int? target1 = null, int? target2 = null) : base(3, title, target1, target2) { }
 

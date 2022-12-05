@@ -3,9 +3,9 @@ using AoC.Utils;
 
 namespace AoC;
 
-public class Day4 : Day<int>
+public class Day4 : Day<int, int?>
 {
-    private Regex _regex = new(@"-|,");
+    private readonly Regex _regex = new(@"-|,");
 
     public Day4(string title, int? target1 = null, int? target2 = null) : base(4, title, target1, target2) { }
 

@@ -1,6 +1,6 @@
 ﻿namespace AoC;
 
-public class Day1 : Day<int>
+public class Day1 : Day<int, int?>
 {
     public Day1(string title, int? target1 = null, int? target2 = null) : base(1, title, target1, target2) { }
 

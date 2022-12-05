@@ -2,15 +2,15 @@ using System.Diagnostics;
 
 namespace AoC;
 
-public abstract class Day<T> : IDay where T : struct
+public abstract class Day<TResult, TTarget> : IDay
 {
     protected readonly string[] Data;
 
     private readonly string _title;
-    private readonly T? _target1;
-    private readonly T? _target2;
+    private readonly TTarget? _target1;
+    private readonly TTarget? _target2;
 
-    protected Day(int day, string title, T? target1 = null, T? target2 = null)
+    protected Day(int day, string title, TTarget? target1, TTarget? target2)
     {
         Data = DataReader.Read(day);
         Debug.Assert(Data.Length > 0);
@@ -30,30 +30,22 @@ public abstract class Day<T> : IDay where T : struct
         Console.WriteLine();
     }
 
-    private static void ExecutePart(Func<T> part1, T? target)
+    private static void ExecutePart(Func<TResult> part1, TTarget? target)
     {
         Timer.StartLap();
         var result = part1();
-        CompareResult(result, target);
+        Console.Write(CompareResult(result, target));
         Timer.LogLap();
     }
 
-    private static void CompareResult(T result, T? target)
+    private static string CompareResult(TResult result, TTarget? target) => result switch
     {
-        if (target.HasValue && !result.Equals(target))
-        {
-            Console.Write($"! result {result} does not match goal {target}");
-        }
-        else if (target.HasValue)
-        {
-            Console.Write($"  {result,-20}");
-        }
-        else
-        {
-            Console.Write($"  result: {result,-20}");
-        }
-    }
+        null => "  No result found!",
+        { } when target == null => $"  result: {result,-20}",
+        { } when result.Equals(target) => $"  {result,-20}",
+        { } => $"! result {result} does not match goal {target}",
+    };
 
-    protected abstract T Part1();
-    protected abstract T Part2();
+    protected abstract TResult Part1();
+    protected abstract TResult Part2();
 }
