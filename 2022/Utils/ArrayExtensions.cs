@@ -28,10 +28,32 @@ public static class ArrayExtensions
 
     public static void Deconstruct<T>(this T[] array, out T a0, out T a1)
     {
-        if (array is not { Length: 2 })
-            throw new ArgumentException("Cannot deconstruct array. Length for tuple needs to be 2!", nameof(array));
+        if (array == null || array.Length < 2)
+            throw new ArgumentException($"Cannot deconstruct array. Length for tuple needs to be {2}!", nameof(array));
+
         a0 = array[0];
         a1 = array[1];
+    }
+
+    public static void Deconstruct<T>(this T[] array, out T a0, out T a1, out T a2)
+    {
+        if (array == null || array.Length < 3)
+            throw new ArgumentException($"Cannot deconstruct array. Length for tuple needs to be {3}!", nameof(array));
+
+        a0 = array[0];
+        a1 = array[1];
+        a2 = array[2];
+    }
+
+    public static void Deconstruct<T>(this T[] array, out T a0, out T a1, out T a2, out T a3)
+    {
+        if (array == null || array.Length < 3)
+            throw new ArgumentException($"Cannot deconstruct array. Length for tuple needs to be {3}!", nameof(array));
+
+        a0 = array[0];
+        a1 = array[1];
+        a2 = array[2];
+        a3 = array[3];
     }
 
     public static void Fill<T>(this T[,] array, T value)

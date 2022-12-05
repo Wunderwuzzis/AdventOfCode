@@ -1,18 +1,20 @@
-﻿using AoC.Utils;
+﻿using System.Text.RegularExpressions;
+using AoC.Utils;
 
 namespace AoC;
 
 public class Day4 : Day<int>
 {
+    private Regex _regex = new(@"-|,");
+
     public Day4(string title, int? target1 = null, int? target2 = null) : base(4, title, target1, target2) { }
 
     protected override int Part1()
     {
         return Data.Count(line =>
         {
-            var bounds = line.ExtractAllInt(4);
-            var contains = bounds[0] <= bounds[2] && bounds[1] >= bounds[3] || bounds[0] >= bounds[2] && bounds[1] <= bounds[3];
-            return contains;
+            var (aMin, aMax, bMin, bMax) = _regex.Split(line).Select(int.Parse).ToArray();
+            return aMin <= bMin && aMax >= bMax || aMin >= bMin && aMax <= bMax;
         });
     }
 
@@ -20,9 +22,8 @@ public class Day4 : Day<int>
     {
         return Data.Count(line =>
         {
-            var bounds = line.ExtractAllInt(4);
-            var exclusive = bounds[0] > bounds[3] || bounds[1] < bounds[2];
-            return !exclusive;
+            var (aMin, aMax, bMin, bMax) = _regex.Split(line).Select(int.Parse).ToArray();
+            return aMin <= bMax && aMax >= bMin;
         });
     }
 }
