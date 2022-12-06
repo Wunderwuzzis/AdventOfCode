@@ -9,8 +9,9 @@ Dictionary<int, IDay> days = new()
     [3] = new Day3Short("Rucksack Reorganization", 7821, 2752),
     [4] = new Day4("Camp Cleanup", 450, 837),
     [5] = new Day5("Supply Stacks", "VWLCWGSDQ", "TCGLQSLPW"),
+    [6] = new Day6("Tuning Trouble", 1896, 3452),
 };
 
 AdventOfCode.Run(days[DateTime.Today.Day]);
 
-AdventOfCode.Run(days);
+// AdventOfCode.Run(days);
