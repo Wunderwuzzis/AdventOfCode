@@ -1,10 +1,10 @@
 ﻿namespace AoC;
 
-public class Day6 : Day<int, int?>
+public class Day6 : Day<int>
 {
     private readonly char[] _buffer;
 
-    public Day6(string title, int? target1, int? target2) : base(6, title, target1, target2)
+    public Day6(string title, int target1, int target2) : base(6, title, target1, target2)
     {
         _buffer = Data[0].ToCharArray();
     }

@@ -2,13 +2,13 @@
 
 namespace AoC;
 
-public class Day5 : Day<string, string?>
+public class Day5 : Day<string>
 {
     private readonly int _stackDataEndIndex;
     private readonly int _instructionDataStartIndex;
     private readonly int[] _crateIndices = { 1, 5, 9, 13, 17, 21, 25, 29, 33 };
 
-    public Day5(string title, string? target1 = null, string? target2 = null) : base(5, title, target1, target2)
+    public Day5(string title, string? target1 = default, string? target2 = default) : base(5, title, target1 ?? string.Empty, target2 ?? string.Empty)
     {
         _stackDataEndIndex = Array.FindIndex(Data, str => str == "");
         _instructionDataStartIndex = _stackDataEndIndex + 1;

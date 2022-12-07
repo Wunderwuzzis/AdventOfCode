@@ -1,8 +1,8 @@
 ﻿namespace AoC;
 
-public class Day1 : Day<int, int?>
+public class Day1 : Day<int>
 {
-    public Day1(string title, int? target1 = null, int? target2 = null) : base(1, title, target1, target2) { }
+    public Day1(string title, int target1 = default, int target2 = default) : base(1, title, target1, target2) { }
 
     private IEnumerable<int> GetCalories()
     {

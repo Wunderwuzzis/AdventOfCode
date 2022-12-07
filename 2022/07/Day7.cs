@@ -3,13 +3,13 @@ using File = AoC.D7.File;
 
 namespace AoC;
 
-public class Day7 : Day<long, long?>
+public class Day7 : Day<long>
 {
     private readonly HashSet<Directory> _directories;
     private readonly Directory _root = new("/");
     private readonly Directory _currentDirectory;
 
-    public Day7(string title, long? target1, long? target2) : base(7, title, target1, target2)
+    public Day7(string title, long target1 = default, long target2 = default) : base(7, title, target1, target2)
     {
         _directories = new HashSet<Directory> { _root };
         _currentDirectory = _root;

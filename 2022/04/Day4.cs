@@ -3,11 +3,11 @@ using AoC.Utils;
 
 namespace AoC;
 
-public class Day4 : Day<int, int?>
+public class Day4 : Day<int>
 {
     private readonly Regex _regex = new(@"-|,");
 
-    public Day4(string title, int? target1 = null, int? target2 = null) : base(4, title, target1, target2) { }
+    public Day4(string title, int target1 = default, int target2 = default) : base(4, title, target1, target2) { }
 
     protected override int Part1()
     {

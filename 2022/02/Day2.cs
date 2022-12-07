@@ -2,7 +2,7 @@
 
 namespace AoC;
 
-public class Day2 : Day<int, int?>
+public class Day2 : Day<int>
 {
     private enum Result
     {
@@ -20,7 +20,7 @@ public class Day2 : Day<int, int?>
     private Dictionary<char, int> _shapeScores = new() { ['X'] = 1, ['Y'] = 2, ['Z'] = 3 };
     private Dictionary<Result, int> _resultScores = new() { [Result.Defeat] = 0, [Result.Draw] = 3, [Result.Victory] = 6 };
 
-    public Day2(string title, int? target1 = null, int? target2 = null) : base(2, title, target1, target2)
+    public Day2(string title, int target1 = default, int target2 = default) : base(2, title, target1, target2)
     {
         _matchData = Data.Select(line => line.Split(' ').Select(GetRpsChar).ToArray());
     }
