@@ -11,10 +11,7 @@ public class Day7 : Day<long, long?>
     public Day7(string title, long? target1, long? target2) : base(7, title, target1, target2)
     {
         _currentDirectory = _root;
-    }
 
-    protected override long Part1()
-    {
         foreach (var line in Data)
         {
             var commands = line.Split(' ');
@@ -22,7 +19,6 @@ public class Day7 : Day<long, long?>
             {
                 case "$" when commands[1] == "cd":
                     _currentDirectory = ChangeDirectory(commands[2]);
-                    Console.WriteLine(_currentDirectory.Id);
                     break;
                 case "$" when commands[1] == "ls":
                     break;
@@ -35,11 +31,7 @@ public class Day7 : Day<long, long?>
             }
         }
 
-        _root.Print();
-
-        var smallDirectories = new List<Directory>();
-        _root.FindAllUnder100000(ref smallDirectories);
-        return smallDirectories.Sum(d => d.GetSize());
+        // _root.Print();
     }
 
     private Directory ChangeDirectory(string target) => target switch
@@ -50,8 +42,19 @@ public class Day7 : Day<long, long?>
         _ => throw new ArgumentOutOfRangeException(nameof(target), target, null)
     };
 
+    protected override long Part1()
+    {
+        var smallDirectories = new List<Directory>();
+        _root.FindAllUnder100000(ref smallDirectories);
+        return smallDirectories.Sum(d => d.GetSize());
+    }
+
     protected override long Part2()
     {
-        return 0;
+        var minimum = _root.GetSize() - 40000000; // max allowed space
+        long smallestAboveMinimum = 70000000; // 70000000 == max disc space
+
+        _root.FindSmallestAboveMinSize(ref smallestAboveMinimum, minimum);
+        return smallestAboveMinimum;
     }
 }

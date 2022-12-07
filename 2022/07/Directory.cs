@@ -26,6 +26,16 @@ public class Directory
             directory.FindAllUnder100000(ref results);
     }
 
+    public void FindSmallestAboveMinSize(ref long smallest, long minSize)
+    {
+        var size = GetSize();
+        if (size >= minSize && size < smallest)
+            smallest = size;
+
+        foreach (var directory in Directories)
+            directory.FindSmallestAboveMinSize(ref smallest, minSize);
+    }
+
     public long GetSize()
     {
         return Files.Sum(f => f.Size) + Directories.Sum(d => d.GetSize());
