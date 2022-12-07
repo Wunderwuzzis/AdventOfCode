@@ -5,11 +5,13 @@ namespace AoC;
 
 public class Day7 : Day<long, long?>
 {
+    private readonly HashSet<Directory> _directories;
     private readonly Directory _root = new("/");
     private readonly Directory _currentDirectory;
 
     public Day7(string title, long? target1, long? target2) : base(7, title, target1, target2)
     {
+        _directories = new HashSet<Directory> { _root };
         _currentDirectory = _root;
 
         foreach (var line in Data)
@@ -23,55 +25,43 @@ public class Day7 : Day<long, long?>
                 case "$" when commands[1] == "ls":
                     break;
                 case "dir":
-                    _currentDirectory.SubDirectories.Add(new Directory(commands[1]));
+                    var newDir = new Directory(commands[1]);
+                    _directories.Add(newDir);
+                    _currentDirectory.SubDirectories.Add(newDir);
                     break;
                 default:
                     _currentDirectory.Files.Add(new File(commands[1], long.Parse(commands[0])));
                     break;
             }
         }
+
+        foreach (var directory in _directories)
+        {
+            directory.CalculateSize();
+        }
     }
 
     private Directory ChangeDirectory(string target) => target switch
     {
         "/" => _root,
-        ".." => _root.GetParentOf(_currentDirectory), // parent
-        { } => _currentDirectory.GetSubDirectory(target), // child
+        ".." => GetParentOf(_currentDirectory),
+        { } => _currentDirectory.GetSubDirectory(target),
         _ => throw new ArgumentOutOfRangeException(nameof(target), target, null)
     };
 
-    protected override long Part1()
+    private Directory GetParentOf(Directory target)
     {
-        var smallDirectories = new List<Directory>();
-        FindAllUnder100000(_root, smallDirectories);
-        return smallDirectories.Sum(d => d.GetSize());
+        return _directories.Single(d => d.SubDirectories.Contains(target));
     }
 
-    private static void FindAllUnder100000(Directory dir, ICollection<Directory> results)
+    protected override long Part1()
     {
-        if (dir.GetSize() <= 100000)
-            results.Add(dir);
-
-        foreach (var subDir in dir.SubDirectories)
-            FindAllUnder100000(subDir, results);
+        return _directories.Where(d => d.Size < 100000).Sum(d => d.Size);
     }
 
     protected override long Part2()
     {
-        var minimum = _root.GetSize() - 40000000; // max allowed space
-        long smallestAboveMinimum = 70000000; // 70000000 == max disc space
-
-        FindSmallestAboveMinSize(_root, minimum, ref smallestAboveMinimum);
-        return smallestAboveMinimum;
-    }
-
-    private static void FindSmallestAboveMinSize(Directory dir, long minSize, ref long smallest)
-    {
-        var size = dir.GetSize();
-        if (size >= minSize && size < smallest)
-            smallest = size;
-
-        foreach (var subDir in dir.SubDirectories)
-            FindSmallestAboveMinSize(subDir, minSize, ref smallest);
+        var minimum = _root.Size - 40000000; // min space to free
+        return _directories.Where(d => d.Size >= minimum).Min(d => d.Size);
     }
 }
