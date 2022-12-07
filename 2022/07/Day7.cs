@@ -3,13 +3,13 @@ using File = AoC.D7.File;
 
 namespace AoC;
 
-public class Day7 : Day<long>
+public class Day7 : Day<int>
 {
     private readonly HashSet<Directory> _directories;
     private readonly Directory _root = new("/");
     private readonly Directory _currentDirectory;
 
-    public Day7(string title, long target1 = default, long target2 = default) : base(7, title, target1, target2)
+    public Day7(string title, int target1 = default, int target2 = default) : base(7, title, target1, target2)
     {
         _directories = new HashSet<Directory> { _root };
         _currentDirectory = _root;
@@ -30,7 +30,7 @@ public class Day7 : Day<long>
                     _currentDirectory.SubDirectories.Add(newDir);
                     break;
                 default:
-                    _currentDirectory.Files.Add(new File(commands[1], long.Parse(commands[0])));
+                    _currentDirectory.Files.Add(new File(commands[1], int.Parse(commands[0])));
                     break;
             }
         }
@@ -54,12 +54,12 @@ public class Day7 : Day<long>
         return _directories.Single(d => d.SubDirectories.Contains(target));
     }
 
-    protected override long Part1()
+    protected override int Part1()
     {
         return _directories.Where(d => d.Size < 100000).Sum(d => d.Size);
     }
 
-    protected override long Part2()
+    protected override int Part2()
     {
         var minimum = _root.Size - 40000000; // min space to free
         return _directories.Where(d => d.Size >= minimum).Min(d => d.Size);

@@ -1,3 +1,3 @@
 ﻿namespace AoC.D7;
 
-public record File(string Filename, long Size);
+public record File(string Filename, int Size);
