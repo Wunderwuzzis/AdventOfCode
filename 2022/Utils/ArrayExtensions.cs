@@ -7,6 +7,18 @@ public static class ArrayExtensions
         Console.WriteLine(string.Join(Environment.NewLine, array.Select(line => string.Join(", ", line))));
     }
 
+    public static void Print<T>(this T[,] array)
+    {
+        for (var i = 0; i < array.GetLength(0); i++)
+        {
+            for (var j = 0; j < array.GetLength(1); j++)
+            {
+                Console.Write(array[i,j] + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+
     public static void PrintWithHighlight<T>(this T[][] array, T highlight)
     {
         var foreground = Console.ForegroundColor;
