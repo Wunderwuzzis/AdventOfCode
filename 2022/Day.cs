@@ -38,8 +38,8 @@ public abstract class Day<T> : IDay where T : IEquatable<T>
     private static string CompareResult(T result, T target) => result switch
     {
         null => "  No result found!",
-        { } when target.Equals(default) => $"  result: {result,-14}",
-        { } when result.Equals(target) => $"  {result,-14}",
+        { } when target.Equals(default) => $"  result: {result,-10}",
+        { } when result.Equals(target) => $"  {result,-18}",
         { } => $"! result {result} does not match goal {target}",
     };
 }
