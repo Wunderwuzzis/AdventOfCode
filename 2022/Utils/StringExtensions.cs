@@ -6,12 +6,12 @@ public static class StringExtensions
 {
     private static readonly Regex IntRegex = new(@"\d+");
 
-    public static int ExtractFirstInt(this string text)
+    public static int ParseInt(this string text)
     {
         return int.Parse(IntRegex.Match(text).Value);
     }
 
-    public static int[] ExtractAllInt(this string text, int maxOccurrences = 0)
+    public static int[] ParseAllInt(this string text, int maxOccurrences = 0)
     {
         var integers = IntRegex.Matches(text)
             .Select(m => int.Parse(m.Value))

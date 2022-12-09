@@ -38,41 +38,19 @@ public class Day9 : Day<int>
         return visitedPoints.Count;
     }
 
-    private static void FollowRope(ref Vector2Int tail, Vector2Int head)
-    {
-        var deltaX = head.X - tail.X;
-        var deltaY = head.Y - tail.Y;
-
-        if (ShouldMove(deltaX, deltaY))
-            tail += CalculateMove(deltaX, deltaY);
-    }
-
-    private static bool ShouldMove(int deltaX, int deltaY)
-    {
-        return Math.Abs(deltaX) > 1 || Math.Abs(deltaY) > 1;
-    }
-
-    private static Vector2Int CalculateMove(int deltaX, int deltaY)
-    {
-        var x = deltaX == 0 ? 0 : 1 * Math.Sign(deltaX);
-        var y = deltaY == 0 ? 0 : 1 * Math.Sign(deltaY);
-        return new Vector2Int(x, y);
-    }
-
     protected override int Part2()
     {
-        var visitedPoints = new HashSet<Vector2Int>();
-
         const int ropeLength = 10;
+
         var rope = new Vector2Int[ropeLength];
+        var visitedPoints = new HashSet<Vector2Int>();
 
         foreach (var line in Data)
         {
-            var instructions = line.Split(' ');
-            var direction = _directions[instructions[0][0]];
-            var amount = int.Parse(instructions[1]);
+            var direction = _directions[line[0]];
+            var repeat = line.ParseInt();
 
-            for (var i = 0; i < amount; i++)
+            for (var i = 0; i < repeat; i++)
             {
                 rope[0] += direction;
 
@@ -86,5 +64,16 @@ public class Day9 : Day<int>
         }
 
         return visitedPoints.Count;
+    }
+
+    private static void FollowRope(ref Vector2Int tail, Vector2Int head)
+    {
+        var deltaX = head.X - tail.X;
+        var deltaY = head.Y - tail.Y;
+
+        if (Math.Abs(deltaX) <= 1 && Math.Abs(deltaY) <= 1) return;
+
+        tail.X += deltaX == 0 ? 0 : Math.Sign(deltaX);
+        tail.Y += deltaY == 0 ? 0 : Math.Sign(deltaY);
     }
 }

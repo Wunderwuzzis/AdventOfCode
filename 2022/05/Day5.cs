@@ -46,7 +46,7 @@ public class Day5 : Day<string>
         var stacks = GetSupplyStacks();
         foreach (var line in Data[_instructionDataStartIndex..])
         {
-            var (repeat, from, to) = line.ExtractAllInt(3);
+            var (repeat, from, to) = line.ParseAllInt(3);
             for (var i = 0; i < repeat; i++)
             {
                 stacks[to].Push(stacks[from].Pop());
@@ -62,7 +62,7 @@ public class Day5 : Day<string>
         var picked = new Stack<char>();
         foreach (var line in Data[_instructionDataStartIndex..])
         {
-            var (amount, from, to) = line.ExtractAllInt(3);
+            var (amount, from, to) = line.ParseAllInt(3);
 
             for (var i = 0; i < amount; i++)
                 picked.Push(stacks[from].Pop());

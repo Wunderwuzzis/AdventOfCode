@@ -1,9 +1,9 @@
 ﻿namespace AoC.Utils;
 
-public readonly struct Vector2Int : IEquatable<Vector2Int>
+public struct Vector2Int : IEquatable<Vector2Int>
 {
-    public readonly int X = 0;
-    public readonly int Y = 0;
+    public int X = 0;
+    public int Y = 0;
 
     public Vector2Int(int x, int y)
     {
