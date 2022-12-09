@@ -11,12 +11,6 @@ public struct Vector2Int : IEquatable<Vector2Int>
         Y = y;
     }
 
-    public Vector2Int(Vector2Int p)
-    {
-        X = p.X;
-        Y = p.Y;
-    }
-
     public static Vector2Int operator +(Vector2Int a, Vector2Int b)
         => new(a.X + b.X, a.Y + b.Y);
 

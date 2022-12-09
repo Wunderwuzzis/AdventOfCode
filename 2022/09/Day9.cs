@@ -1,36 +1,27 @@
-﻿using AoC.Utils;
+﻿using System.Numerics;
 
 namespace AoC;
 
 public class Day9 : Day<int>
 {
-    private const int RopeLength = 10;
-    private readonly Dictionary<char, Vector2Int> _directions = new()
-    {
-        { 'R', new Vector2Int(1, 0) },
-        { 'L', new Vector2Int(-1, 0) },
-        { 'U', new Vector2Int(0, 1) },
-        { 'D', new Vector2Int(0, -1) }
-    };
-
     public Day9(string title, int target1 = default, int target2 = default) : base(9, title, target1, target2) { }
 
     protected override void ExecuteParts(out int part1, out int part2)
     {
-        var rope = new Vector2Int[RopeLength];
-        var visitedPoints1 = new HashSet<Vector2Int>();
-        var visitedPoints2 = new HashSet<Vector2Int>();
+        var rope = new Vector2[10];
+        var visitedPoints1 = new HashSet<Vector2>();
+        var visitedPoints2 = new HashSet<Vector2>();
 
         foreach (var line in Data)
         {
-            var direction = _directions[line[0]];
-            var repeat = line.ParseInt();
+            var direction = GetDirection(line[0]);
+            var repeat = int.Parse(line[2..]);
 
             for (var i = 0; i < repeat; i++)
             {
                 rope[0] += direction;
 
-                for (var j = 1; j < RopeLength; j++)
+                for (var j = 1; j < rope.Length; j++)
                 {
                     FollowRope(ref rope[j], rope[j - 1]);
                 }
@@ -44,14 +35,23 @@ public class Day9 : Day<int>
         part2 = visitedPoints2.Count;
     }
 
-    private static void FollowRope(ref Vector2Int tail, Vector2Int head)
+    private static Vector2 GetDirection(char dir) => dir switch
     {
-        var deltaX = head.X - tail.X;
-        var deltaY = head.Y - tail.Y;
+        'R' => Vector2.UnitX,
+        'L' => -Vector2.UnitX,
+        'U' => Vector2.UnitY,
+        'D' => -Vector2.UnitY,
+        _ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
+    };
 
-        if (Math.Abs(deltaX) <= 1 && Math.Abs(deltaY) <= 1) return;
+    private static void FollowRope(ref Vector2 tail, Vector2 head)
+    {
+        var delta = head - tail;
 
-        tail.X += deltaX == 0 ? 0 : Math.Sign(deltaX);
-        tail.Y += deltaY == 0 ? 0 : Math.Sign(deltaY);
+        if (Math.Abs(delta.X) <= 1 && Math.Abs(delta.Y) <= 1)
+            return;
+
+        tail.X += Math.Sign(delta.X);
+        tail.Y += Math.Sign(delta.Y);
     }
 }
