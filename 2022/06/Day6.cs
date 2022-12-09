@@ -9,14 +9,10 @@ public class Day6 : Day<int>
         _buffer = Data[0].ToCharArray();
     }
 
-    protected override int Part1()
+    protected override void ExecuteParts(out int part1, out int part2)
     {
-        return FindDistinctChunk(4);
-    }
-
-    protected override int Part2()
-    {
-        return FindDistinctChunk(14);
+        part1 = FindDistinctChunk(4);
+        part2 = FindDistinctChunk(14);
     }
 
     private int FindDistinctChunk(int length)

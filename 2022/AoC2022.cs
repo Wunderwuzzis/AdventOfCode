@@ -15,6 +15,6 @@ Dictionary<int, IDay> days = new()
     [9] = new Day9("Rope Bridge", 5960, 2327),
 };
 
-AdventOfCode.Run(days[DateTime.Today.Day]);
+// AdventOfCode.Run(days[DateTime.Today.Day]);
 
-// AdventOfCode.Run(days);
+AdventOfCode.Run(days);

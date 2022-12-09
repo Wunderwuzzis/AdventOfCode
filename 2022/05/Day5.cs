@@ -14,6 +14,35 @@ public class Day5 : Day<string>
         _instructionDataStartIndex = _stackDataEndIndex + 1;
     }
 
+    protected override void ExecuteParts(out string part1, out string part2)
+    {
+        var stacks1 = GetSupplyStacks();
+        var stacks2 = GetSupplyStacks();
+
+        var picked = new Stack<char>();
+
+        foreach (var line in Data[_instructionDataStartIndex..])
+        {
+            var (amount, from, to) = line.ParseAllInt(3);
+
+            for (var i = 0; i < amount; i++)
+            {
+                stacks1[to].Push(stacks1[from].Pop());
+                picked.Push(stacks2[from].Pop());
+            }
+
+            for (var i = 0; i < amount; i++)
+            {
+                stacks2[to].Push(picked.Pop());
+            }
+
+            picked.Clear();
+        }
+
+        part1 = string.Join("", stacks1.Select(s => s.Value.Pop()));
+        part2 = string.Join("", stacks2.Select(s => s.Value.Pop()));
+    }
+
     private Dictionary<int, Stack<char>> GetSupplyStacks()
     {
         var supplies = new Dictionary<int, IList<char>>();
@@ -39,40 +68,5 @@ public class Day5 : Day<string>
         return supplies
             .OrderBy(x => x.Key)
             .ToDictionary(x => x.Key, x => new Stack<char>(x.Value.Reverse()));
-    }
-
-    protected override string Part1()
-    {
-        var stacks = GetSupplyStacks();
-        foreach (var line in Data[_instructionDataStartIndex..])
-        {
-            var (repeat, from, to) = line.ParseAllInt(3);
-            for (var i = 0; i < repeat; i++)
-            {
-                stacks[to].Push(stacks[from].Pop());
-            }
-        }
-
-        return string.Join("", stacks.Select(s => s.Value.Pop()));
-    }
-
-    protected override string Part2()
-    {
-        var stacks = GetSupplyStacks();
-        var picked = new Stack<char>();
-        foreach (var line in Data[_instructionDataStartIndex..])
-        {
-            var (amount, from, to) = line.ParseAllInt(3);
-
-            for (var i = 0; i < amount; i++)
-                picked.Push(stacks[from].Pop());
-
-            for (var i = 0; i < amount; i++)
-                stacks[to].Push(picked.Pop());
-
-            picked.Clear();
-        }
-
-        return string.Join("", stacks.Select(s => s.Value.Pop()));
     }
 }

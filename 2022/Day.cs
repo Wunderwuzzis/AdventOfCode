@@ -22,24 +22,24 @@ public abstract class Day<T> : IDay where T : IEquatable<T>
 
     public void Execute()
     {
-        Console.WriteLine($"{GetType().Name}: {_title}");
+        Console.Write("{0, -40}", $"{GetType().Name}: {_title}");
 
         Timer.StartLap();
-        (T part1, T part2) result = ExecuteParts();
-        Console.Write(CompareResult(result.part1, _target1));
-        Console.Write(CompareResult(result.part2, _target2));
+        ExecuteParts(out var part1, out var part2);
+        Console.Write(CompareResult(part1, _target1));
+        Console.Write(CompareResult(part2, _target2));
         Timer.LogLap();
 
         Console.WriteLine();
     }
 
+    protected abstract void ExecuteParts(out T part1, out T part2);
+
     private static string CompareResult(T result, T target) => result switch
     {
         null => "  No result found!",
-        { } when target.Equals(default) => $"  result: {result,-20}",
-        { } when result.Equals(target) => $"  {result,-20}",
+        { } when target.Equals(default) => $"  result: {result,-14}",
+        { } when result.Equals(target) => $"  {result,-14}",
         { } => $"! result {result} does not match goal {target}",
     };
-
-    protected abstract (T, T) ExecuteParts();
 }

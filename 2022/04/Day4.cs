@@ -9,18 +9,15 @@ public class Day4 : Day<int>
 
     public Day4(string title, int target1 = default, int target2 = default) : base(4, title, target1, target2) { }
 
-    protected override int Part1()
+    protected override void ExecuteParts(out int part1, out int part2)
     {
-        return Data.Count(line =>
+        part1 = Data.Count(line =>
         {
             var (aMin, aMax, bMin, bMax) = _regex.Split(line).Select(int.Parse).ToArray();
             return aMin <= bMin && aMax >= bMax || aMin >= bMin && aMax <= bMax;
         });
-    }
 
-    protected override int Part2()
-    {
-        return Data.Count(line =>
+        part2 = Data.Count(line =>
         {
             var (aMin, aMax, bMin, bMax) = _regex.Split(line).Select(int.Parse).ToArray();
             return aMin <= bMax && aMax >= bMin;

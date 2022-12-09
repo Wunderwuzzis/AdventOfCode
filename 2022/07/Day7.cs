@@ -54,14 +54,11 @@ public class Day7 : Day<int>
         return _directories.Single(d => d.SubDirectories.Contains(target));
     }
 
-    protected override int Part1()
+    protected override void ExecuteParts(out  int part1, out int part2)
     {
-        return _directories.Where(d => d.Size < 100000).Sum(d => d.Size);
-    }
-
-    protected override int Part2()
-    {
+        part1 = _directories.Where(d => d.Size < 100000).Sum(d => d.Size);
+        
         var minimum = _root.Size - 40000000; // min space to free
-        return _directories.Where(d => d.Size >= minimum).Min(d => d.Size);
+        part2 = _directories.Where(d => d.Size >= minimum).Min(d => d.Size);
     }
 }

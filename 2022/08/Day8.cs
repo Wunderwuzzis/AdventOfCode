@@ -11,7 +11,13 @@ public class Day8 : Day<int>
         _visibleTrees = Data.Select(line => line.ToCharArray().Select(_ => false).ToArray()).ToArray();
     }
 
-    protected override int Part1()
+    protected override void ExecuteParts(out int part1, out int part2)
+    {
+        part1 = Part1();
+        part2 = Part2();
+    }
+
+    private int Part1()
     {
         for (var row = 0; row < _trees.Length; row++)
         {
@@ -80,7 +86,7 @@ public class Day8 : Day<int>
         }
     }
 
-    protected override int Part2()
+    private int Part2()
     {
         return CalculateTreehouseScores().Max(row => row.Max());
     }

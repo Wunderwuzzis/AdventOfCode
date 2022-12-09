@@ -16,13 +16,10 @@ public class Day1 : Day<int>
             .Sum());
     }
 
-    protected override int Part1()
+    protected override void ExecuteParts(out int part1, out int part2)
     {
-        return GetCalories().Max();
-    }
-
-    protected override int Part2()
-    {
-        return GetCalories().OrderByDescending(x => x).Take(3).Sum();
+        var calories = GetCalories().ToArray();
+        part1 = calories.Max();
+        part2 = calories.OrderByDescending(x => x).Take(3).Sum();
     }
 }

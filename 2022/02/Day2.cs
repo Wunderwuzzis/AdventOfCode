@@ -31,9 +31,10 @@ public class Day2 : Day<int>
         return _rpsChars.TryGetValue(c, out var rps) ? rps : c;
     }
 
-    protected override int Part1()
+    protected override void ExecuteParts(out int part1, out int part2)
     {
-        return CalculateGameScore1().Sum();
+        part1 = CalculateGameScore1().Sum();
+        part2 = CalculateGameScore2().Sum();
     }
 
     private IEnumerable<int> CalculateGameScore1()
@@ -52,11 +53,6 @@ public class Day2 : Day<int>
     private int CalculateScore(char own, Result result)
     {
         return _shapeScores[own] + _resultScores[result];
-    }
-
-    protected override int Part2()
-    {
-        return CalculateGameScore2().Sum();
     }
 
     private IEnumerable<int> CalculateGameScore2()

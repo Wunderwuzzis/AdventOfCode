@@ -25,7 +25,7 @@ public static class Timer
         var lapTime = Watch.Elapsed.TotalMilliseconds;
         _total += lapTime;
 
-        Console.WriteLine($"( {lapTime:0.000} ms)");
+        Console.Write($"( {lapTime:0.000} ms)");
     }
 
     public static void LogTotal()

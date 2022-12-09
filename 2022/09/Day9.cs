@@ -15,7 +15,7 @@ public class Day9 : Day<int>
 
     public Day9(string title, int target1 = default, int target2 = default) : base(9, title, target1, target2) { }
 
-    protected override (int, int) ExecuteParts()
+    protected override void ExecuteParts(out int part1, out int part2)
     {
         var rope = new Vector2Int[RopeLength];
         var visitedPoints1 = new HashSet<Vector2Int>();
@@ -40,7 +40,8 @@ public class Day9 : Day<int>
             }
         }
 
-        return (visitedPoints1.Count, visitedPoints2.Count);
+        part1 = visitedPoints1.Count;
+        part2 = visitedPoints2.Count;
     }
 
     private static void FollowRope(ref Vector2Int tail, Vector2Int head)
