@@ -24,18 +24,13 @@ public abstract class Day<T> : IDay where T : IEquatable<T>
     {
         Console.WriteLine($"{GetType().Name}: {_title}");
 
-        ExecutePart(Part1, _target1);
-        ExecutePart(Part2, _target2);
+        Timer.StartLap();
+        (T part1, T part2) result = ExecuteParts();
+        Console.Write(CompareResult(result.part1, _target1));
+        Console.Write(CompareResult(result.part2, _target2));
+        Timer.LogLap();
 
         Console.WriteLine();
-    }
-
-    private static void ExecutePart(Func<T> part1, T target)
-    {
-        Timer.StartLap();
-        var result = part1();
-        Console.Write(CompareResult(result, target));
-        Timer.LogLap();
     }
 
     private static string CompareResult(T result, T target) => result switch
@@ -46,6 +41,5 @@ public abstract class Day<T> : IDay where T : IEquatable<T>
         { } => $"! result {result} does not match goal {target}",
     };
 
-    protected abstract T Part1();
-    protected abstract T Part2();
+    protected abstract (T, T) ExecuteParts();
 }

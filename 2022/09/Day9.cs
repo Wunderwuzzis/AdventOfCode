@@ -4,6 +4,7 @@ namespace AoC;
 
 public class Day9 : Day<int>
 {
+    private const int RopeLength = 10;
     private readonly Dictionary<char, Vector2Int> _directions = new()
     {
         { 'R', new Vector2Int(1, 0) },
@@ -14,36 +15,11 @@ public class Day9 : Day<int>
 
     public Day9(string title, int target1 = default, int target2 = default) : base(9, title, target1, target2) { }
 
-    protected override int Part1()
+    protected override (int, int) ExecuteParts()
     {
-        var visitedPoints = new HashSet<Vector2Int>();
-
-        var tail = new Vector2Int(0, 0);
-        var head = new Vector2Int(0, 0);
-
-        foreach (var line in Data)
-        {
-            var instructions = line.Split(' ');
-            var direction = _directions[instructions[0][0]];
-            var amount = int.Parse(instructions[1]);
-
-            for (var i = 0; i < amount; i++)
-            {
-                head += direction;
-                FollowRope(ref tail, head);
-                visitedPoints.Add(tail);
-            }
-        }
-
-        return visitedPoints.Count;
-    }
-
-    protected override int Part2()
-    {
-        const int ropeLength = 10;
-
-        var rope = new Vector2Int[ropeLength];
-        var visitedPoints = new HashSet<Vector2Int>();
+        var rope = new Vector2Int[RopeLength];
+        var visitedPoints1 = new HashSet<Vector2Int>();
+        var visitedPoints2 = new HashSet<Vector2Int>();
 
         foreach (var line in Data)
         {
@@ -54,16 +30,17 @@ public class Day9 : Day<int>
             {
                 rope[0] += direction;
 
-                for (var j = 1; j < ropeLength; j++)
+                for (var j = 1; j < RopeLength; j++)
                 {
                     FollowRope(ref rope[j], rope[j - 1]);
                 }
 
-                visitedPoints.Add(rope[9]);
+                visitedPoints1.Add(rope[1]);
+                visitedPoints2.Add(rope[9]);
             }
         }
 
-        return visitedPoints.Count;
+        return (visitedPoints1.Count, visitedPoints2.Count);
     }
 
     private static void FollowRope(ref Vector2Int tail, Vector2Int head)
