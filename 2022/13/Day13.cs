@@ -34,8 +34,8 @@ public class Day13 : Day<int>
             if (indexR >= inputR.Length)
                 return false;
 
-            var cL = inputL[indexL];
-            var cR = inputR[indexR];
+            var cL = inputL[++indexL];
+            var cR = inputR[++indexR];
 
             var leftIsNumber = TryGetNextInteger(out var valueL, ref indexL, inputL);
             var rightIsNumber = TryGetNextInteger(out var valueR, ref indexR, inputR);
@@ -44,59 +44,38 @@ public class Day13 : Day<int>
             {
                 if (valueL < valueR) return true;
                 if (valueL > valueR) return false;
+                if (Release(ref bufferL, cR, ref indexR)) return true;
+                if (Release(ref bufferR, cL, ref indexL)) return false;
+            }
+            else if (cL == ']' && !Close(cR, ref indexR)) return true;
+            else if (cR == ']' && !Close(cL, ref indexL)) return false;
+            else if (leftIsNumber) Keep(ref bufferL, ref indexL);
+            else if (rightIsNumber) Keep(ref bufferR, ref indexR);
 
-                while (bufferR > 0)
-                {
-                    bufferR--;
-                    if (!CloseL()) return false;
-                }
-
-                while (bufferL > 0)
-                {
-                    bufferL--;
-                    if (!CloseR()) return true;
-                }
-            }
-            else if (cL == ']')
+            bool Close(char c, ref int index)
             {
-                if (!CloseR()) return true;
-            }
-            else if (cR == ']')
-            {
-                if (!CloseL()) return false;
-            }
-            else if (leftIsNumber)
-            {
-                bufferL++;
-                indexR++;
-                continue;
-            }
-            else if (rightIsNumber)
-            {
-                bufferR++;
-                indexL++;
-                continue;
-            }
-
-            indexL++;
-            indexR++;
-
-            bool CloseL()
-            {
-                if (cL == ']')
-                    indexL++;
+                if (c == ']')
+                    index++;
                 else
                     return false;
                 return true;
             }
 
-            bool CloseR()
+            void Keep(ref int buffer, ref int index)
             {
-                if (cR == ']')
-                    indexR++;
-                else
-                    return false;
-                return true;
+                buffer++;
+                index--;
+            }
+
+            bool Release(ref int buffer, char otherChar, ref int otherIndex)
+            {
+                while (buffer > 0)
+                {
+                    buffer--;
+                    if (!Close(otherChar, ref otherIndex)) return true;
+                }
+
+                return false;
             }
         }
 
