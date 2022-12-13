@@ -26,9 +26,11 @@ public abstract class Day<T> : IDay where T : IEquatable<T>
 
         Timer.StartLap();
         ExecuteParts(out var part1, out var part2);
+        Timer.TimeLap();
+
         Console.Write(CompareResult(part1, _target1));
         Console.Write(CompareResult(part2, _target2));
-        Timer.LogLap();
+        Timer.LogLastLap();
 
         Console.WriteLine();
     }

@@ -6,6 +6,7 @@ public static class Timer
 {
     private static readonly Stopwatch Watch = new();
     private static double _total;
+    private static double _lastLap;
 
     public static void Start()
     {
@@ -18,14 +19,18 @@ public static class Timer
         Watch.Restart();
     }
 
-    public static void LogLap()
+    public static void TimeLap()
     {
         Watch.Stop();
 
-        var lapTime = Watch.Elapsed.TotalMilliseconds;
-        _total += lapTime;
+        _lastLap = Watch.Elapsed.TotalMilliseconds;
+    }
 
-        Console.Write($"( {lapTime:0.000} ms)");
+    public static void LogLastLap()
+    {
+        _total += _lastLap;
+
+        Console.Write($"( {_lastLap:0.000} ms)");
     }
 
     public static void LogTotal()
