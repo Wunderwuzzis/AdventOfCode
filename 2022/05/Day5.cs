@@ -4,24 +4,22 @@ namespace AoC;
 
 public class Day5 : Day<string>
 {
-    private readonly int _stackDataEndIndex;
-    private readonly int _instructionDataStartIndex;
     private readonly int[] _crateIndices = { 1, 5, 9, 13, 17, 21, 25, 29, 33 };
 
-    public Day5(string title, string? target1 = default, string? target2 = default) : base(5, title, target1 ?? string.Empty, target2 ?? string.Empty)
-    {
-        _stackDataEndIndex = Array.FindIndex(Data, str => str == "");
-        _instructionDataStartIndex = _stackDataEndIndex + 1;
-    }
+    public Day5(string title, string? target1 = default, string? target2 = default)
+        : base(5, title, target1 ?? string.Empty, target2 ?? string.Empty) { }
 
     protected override void ExecuteParts(out string part1, out string part2)
     {
-        var stacks1 = GetSupplyStacks();
-        var stacks2 = GetSupplyStacks();
+        var stackDataEndIndex = Array.FindIndex(Data, str => str == "");
+        var instructionDataStartIndex = stackDataEndIndex + 1;
+
+        var stacks1 = GetSupplyStacks(stackDataEndIndex);
+        var stacks2 = GetSupplyStacks(stackDataEndIndex);
 
         var picked = new Stack<char>();
 
-        foreach (var line in Data[_instructionDataStartIndex..])
+        foreach (var line in Data[instructionDataStartIndex..])
         {
             var (amount, from, to) = line.ParseAllInt(3);
 
@@ -43,11 +41,11 @@ public class Day5 : Day<string>
         part2 = string.Join("", stacks2.Select(s => s.Value.Pop()));
     }
 
-    private Dictionary<int, Stack<char>> GetSupplyStacks()
+    private Dictionary<int, Stack<char>> GetSupplyStacks(int stackDataEndIndex)
     {
         var supplies = new Dictionary<int, IList<char>>();
 
-        foreach (var line in Data[.._stackDataEndIndex])
+        foreach (var line in Data[..stackDataEndIndex])
         {
             var chars = line.ToCharArray();
 

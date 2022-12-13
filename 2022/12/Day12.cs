@@ -4,10 +4,20 @@ public class Day12 : Day<int>
 {
     private readonly Dictionary<(int x, int y), int> _map = new();
     private readonly Dictionary<(int x, int y), int> _distances = new();
-    private readonly (int x, int y) _start;
-    private readonly (int x, int y) _end;
+    private (int x, int y) _start;
+    private (int x, int y) _end;
 
-    public Day12(string title, int target1 = default, int target2 = default) : base(12, title, target1, target2)
+    public Day12(string title, int target1 = default, int target2 = default) : base(12, title, target1, target2) { }
+
+    protected override void ExecuteParts(out int part1, out int part2)
+    {
+        ScanMap();
+        DetectDistancesFromEnd();
+        part1 = _distances[_start];
+        part2 = _distances.Where(x => _map[x.Key] == 0).Min(x => x.Value);
+    }
+
+    private void ScanMap()
     {
         for (var y = 0; y < Data.Length; y++)
         {
@@ -31,12 +41,6 @@ public class Day12 : Day<int>
         }
     }
 
-    protected override void ExecuteParts(out int part1, out int part2)
-    {
-        DetectDistancesFromEnd();
-        part1 = _distances[_start];
-        part2 = _distances.Where(x => _map[x.Key] == 0).Min(x => x.Value);
-    }
 
     private void DetectDistancesFromEnd()
     {

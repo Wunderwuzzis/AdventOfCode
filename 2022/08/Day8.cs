@@ -2,17 +2,16 @@
 
 public class Day8 : Day<int>
 {
-    private readonly int[][] _trees;
-    private readonly bool[][] _visibleTrees;
+    private int[][] _trees = { };
+    private bool[][] _visibleTrees = { };
 
-    public Day8(string title, int target1 = default, int target2 = default) : base(8, title, target1, target2)
-    {
-        _trees = Data.Select(line => line.ToCharArray().Select(c => (int) char.GetNumericValue(c)).ToArray()).ToArray();
-        _visibleTrees = Data.Select(line => line.ToCharArray().Select(_ => false).ToArray()).ToArray();
-    }
+    public Day8(string title, int target1 = default, int target2 = default) : base(8, title, target1, target2) { }
 
     protected override void ExecuteParts(out int part1, out int part2)
     {
+        _trees = Data.Select(line => line.ToCharArray().Select(c => (int) char.GetNumericValue(c)).ToArray()).ToArray();
+        _visibleTrees = Data.Select(line => line.ToCharArray().Select(_ => false).ToArray()).ToArray();
+
         part1 = Part1();
         part2 = Part2();
     }
