@@ -1,104 +1,42 @@
-﻿namespace AoC;
+﻿using System.Text.Json.Nodes;
+using AoC.Utils;
 
+namespace AoC;
+
+// Adaptation from https://github.com/encse/adventofcode/blob/master/2022/Day13/Solution.cs
 public class Day13 : Day<int>
 {
     public Day13(string title, int target1 = default, int target2 = default) : base(13, title, target1, target2) { }
 
     protected override void ExecuteParts(out int part1, out int part2)
     {
-        var packets = Data.Chunk(3).Select(x => (x[0], x[1])).ToArray();
+        JsonNode Parse(string line) =>
+            JsonNode.Parse(line) ?? throw new InvalidOperationException($"Line: {line} is no json node.");
 
-        var validIndices = new List<int>();
-        var packetIndex = 0;
+        part1 = Data.Chunk(3)
+            .Select((pair, index) => Compare(Parse(pair[0]), Parse(pair[1])) < 0 ? index + 1 : 0)
+            .Sum();
 
-        foreach (var (left, right) in packets)
-        {
-            packetIndex++;
-            if (CheckAscendingPacket(left, right))
-                validIndices.Add(packetIndex);
-        }
+        var div2 = Parse("[[2]]");
+        var div6 = Parse("[[6]]");
+        var packets = Data.Where(line => line != "")
+            .Select(Parse)
+            .Concat(new List<JsonNode> { div2, div6 })
+            .ToArray()
+            .Sort(Compare);
 
-        part1 = validIndices.Sum();
-        part2 = 0;
+        part2 = (packets.IndexOf(div2) + 1) * (packets.IndexOf(div6) + 1);
     }
 
-    private static bool CheckAscendingPacket(string inputL, string inputR)
+    private static int Compare(JsonNode nodeA, JsonNode nodeB)
     {
-        var indexL = 0;
-        var indexR = 0;
-        var bufferL = 0;
-        var bufferR = 0;
+        if (nodeA is JsonValue && nodeB is JsonValue)
+            return (int) nodeA - (int) nodeB;
 
-        while (indexL < inputL.Length)
-        {
-            if (indexR >= inputR.Length)
-                return false;
-
-            var cL = inputL[++indexL];
-            var cR = inputR[++indexR];
-
-            var leftIsNumber = TryGetNextInteger(out var valueL, ref indexL, inputL);
-            var rightIsNumber = TryGetNextInteger(out var valueR, ref indexR, inputR);
-
-            if (leftIsNumber && rightIsNumber)
-            {
-                if (valueL < valueR) return true;
-                if (valueL > valueR) return false;
-                if (Release(ref bufferL, cR, ref indexR)) return true;
-                if (Release(ref bufferR, cL, ref indexL)) return false;
-            }
-            else if (cL == ']' && !Close(cR, ref indexR)) return true;
-            else if (cR == ']' && !Close(cL, ref indexL)) return false;
-            else if (leftIsNumber) Keep(ref bufferL, ref indexL);
-            else if (rightIsNumber) Keep(ref bufferR, ref indexR);
-
-            bool Close(char c, ref int index)
-            {
-                if (c == ']')
-                    index++;
-                else
-                    return false;
-                return true;
-            }
-
-            void Keep(ref int buffer, ref int index)
-            {
-                buffer++;
-                index--;
-            }
-
-            bool Release(ref int buffer, char otherChar, ref int otherIndex)
-            {
-                while (buffer > 0)
-                {
-                    buffer--;
-                    if (!Close(otherChar, ref otherIndex)) return true;
-                }
-
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static bool TryGetNextInteger(out int result, ref int index, string text)
-    {
-        result = -1;
-
-        if (!char.IsNumber(text[index]))
-            return false;
-
-        var startIndex = index;
-        while (char.IsNumber(text[startIndex - 1]))
-            startIndex--;
-
-        var endIndex = index;
-        while (char.IsNumber(text[endIndex]))
-            endIndex++;
-
-        result = int.Parse(text[startIndex..endIndex]);
-        index = endIndex - 1;
-        return true;
+        var arrayA = nodeA as JsonArray ?? new JsonArray((int) nodeA);
+        var arrayB = nodeB as JsonArray ?? new JsonArray((int) nodeB);
+        return arrayA.Zip(arrayB)
+            .Select(packet => Compare(packet.First!, packet.Second!))
+            .FirstOrDefault(comparison => comparison != 0, arrayA.Count - arrayB.Count);
     }
 }

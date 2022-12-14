@@ -13,8 +13,9 @@ public static class ArrayExtensions
         {
             for (var j = 0; j < array.GetLength(1); j++)
             {
-                Console.Write(array[i,j] + " ");
+                Console.Write(array[i, j] + " ");
             }
+
             Console.WriteLine();
         }
     }
@@ -77,5 +78,16 @@ public static class ArrayExtensions
                 array[x, y] = value;
             }
         }
+    }
+
+    public static T[] Sort<T>(this T[] array, Comparison<T> comparison)
+    {
+        Array.Sort(array, comparison);
+        return array;
+    }
+
+    public static int IndexOf<T>(this T[] array, T item)
+    {
+        return Array.IndexOf(array, item);
     }
 }
