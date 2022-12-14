@@ -17,6 +17,7 @@ Dictionary<int, IDay> days = new()
     [11] = new Day11("Monkey in the Middle", 54036, 13237873355),
     [12] = new Day12("Hill Climbing Algorithm", 462, 451),
     [13] = new Day13("Distress Signal", 4643, 21614),
+    [14] = new Day14("Regolith Reservoir", 838, 27539),
 };
 
 AdventOfCode.Run(days[DateTime.Today.Day]);

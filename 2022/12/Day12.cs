@@ -1,5 +1,6 @@
 ﻿namespace AoC;
 
+// Adaptation from https://github.com/sanderploegsma/advent-of-code/blob/master/2022/csharp/Day12.cs
 public class Day12 : Day<int>
 {
     private readonly Dictionary<(int x, int y), int> _map = new();
