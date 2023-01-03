@@ -4,7 +4,7 @@ namespace AoC.Utils;
 
 public static class StringExtensions
 {
-    private static readonly Regex IntRegex = new(@"\d+");
+    private static readonly Regex IntRegex = new(@"-?\d+");
 
     public static int ParseInt(this string text)
     {

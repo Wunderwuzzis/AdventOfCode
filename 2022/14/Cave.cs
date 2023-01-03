@@ -4,14 +4,20 @@ namespace AoC;
 
 public class Cave
 {
+    private static readonly Vector2 SandSource = new(500, 0);
+    private static readonly Vector2 Down = new(0, 1);
+    private static readonly Vector2 Left = new(-1, 1);
+    private static readonly Vector2 Right = new(1, 1);
+
     private readonly Dictionary<Vector2, char> _map;
     private readonly int _height;
-    private static readonly Vector2 SandSource = new(500, 0);
-    private static readonly Vector2[] FallingDirections = { new(0, 1), new(-1, 1), new(1, 1) };
-    public int SandAmount => _map.Values.Count(x => x == 'o');
+    private readonly bool _hasFloor;
 
-    public Cave(IEnumerable<Vector2[]> lines)
+    private int SandCount => _map.Values.Count(x => x == 'o');
+
+    public Cave(IEnumerable<Vector2[]> lines, bool hasFloor)
     {
+        _hasFloor = hasFloor;
         _map = new Dictionary<Vector2, char>();
 
         foreach (var steps in lines)
@@ -29,21 +35,35 @@ public class Cave
             _map[pos] = '#';
     }
 
-    public void FillWithSand(bool hasFloor)
+    public int FillWithSand()
     {
-        var falling = true;
-        while (falling)
-            falling = DropSand(hasFloor);
+        Vector2 location;
+        do
+        {
+            location = DropSand(SandSource);
+
+            if (!_hasFloor && location.Y > _height)
+                return SandCount;
+
+        } while (_map.TryAdd(location, 'o'));
+
+        return SandCount;
     }
 
-    private bool DropSand(bool hasFloor)
+    private Vector2 DropSand(Vector2 sand)
     {
-        var sand = SandSource;
         while (sand.Y <= _height)
-            foreach (var dir in FallingDirections)
-                if (!_map.ContainsKey(sand + dir))
-                    return _map.TryAdd(sand + dir, 'o');
+        {
+            if (!_map.ContainsKey(sand + Down))
+                sand += Down;
+            else if (!_map.ContainsKey(sand + Left))
+                sand += Left;
+            else if (!_map.ContainsKey(sand + Right))
+                sand += Right;
+            else
+                break;
+        }
 
-        return hasFloor && _map.TryAdd(sand, 'o');
+        return sand;
     }
 }

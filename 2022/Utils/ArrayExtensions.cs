@@ -20,6 +20,21 @@ public static class ArrayExtensions
         }
     }
 
+    public static void Print(this bool[,] array)
+    {
+        for (var i = 0; i < array.GetLength(0); i++)
+        {
+            Console.Write($"{i:00}  ");
+
+            for (var j = 0; j < array.GetLength(1); j++)
+            {
+                Console.Write(array[i, j] ? "#" : ".");
+            }
+
+            Console.WriteLine();
+        }
+    }
+
     public static void PrintWithHighlight<T>(this T[][] array, T highlight)
     {
         var foreground = Console.ForegroundColor;

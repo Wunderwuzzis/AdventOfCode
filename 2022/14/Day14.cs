@@ -15,11 +15,10 @@ public class Day14 : Day<int>
             return new Vector2(int.Parse(parts[0]), int.Parse(parts[1]));
         }).ToArray()).ToArray();
 
-        var cave = new Cave(steps);
+        var cave = new Cave(steps, hasFloor: false);
+        part1 = cave.FillWithSand();
 
-        cave.FillWithSand(false);
-        part1 = cave.SandAmount;
-        cave.FillWithSand(true);
-        part2 = cave.SandAmount;
+        cave = new Cave(steps, hasFloor: true);
+        part2 = cave.FillWithSand();
     }
 }

@@ -4,6 +4,7 @@ namespace AoC;
 
 public abstract class Day<T> : IDay where T : IEquatable<T>
 {
+    protected readonly string RawData;
     protected readonly string[] Data;
 
     private readonly string _title;
@@ -12,7 +13,8 @@ public abstract class Day<T> : IDay where T : IEquatable<T>
 
     protected Day(int day, string title, T target1, T target2)
     {
-        Data = DataReader.Read(day);
+        RawData = DataReader.Read(day);
+        Data = RawData.Split('\n');
         Debug.Assert(Data.Length > 0);
 
         _title = title;
